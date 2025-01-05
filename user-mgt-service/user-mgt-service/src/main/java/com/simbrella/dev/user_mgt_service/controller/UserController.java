@@ -65,4 +65,9 @@ public class UserController {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", userService.updateUser(id, updateRequest)));
 
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable(value = "id") @Positive(message = "User ID must be a positive number") Long id) {
+        userService.deleteUser(id);
+    }
 }

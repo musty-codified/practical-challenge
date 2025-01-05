@@ -84,6 +84,13 @@ public class UserServiceImpl implements UserService {
         return appUtil.mapToDto(savedUser);
     }
 
+    @Override
+    public void deleteUser(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + id, NOT_FOUND.name()));
+        userRepository.delete(user);
+    }
+
 
     private void validateEmail(String email) {
         if (!AppUtil.isEmailValid(email)) {
