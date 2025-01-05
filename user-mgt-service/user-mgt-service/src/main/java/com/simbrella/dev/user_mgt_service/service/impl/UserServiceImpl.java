@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class  UserServiceImpl implements UserService {
     private final AppUtil appUtil;
     private final UserRepository userRepository;
     @Override

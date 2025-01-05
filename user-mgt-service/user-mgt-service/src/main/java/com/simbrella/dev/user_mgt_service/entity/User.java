@@ -47,12 +47,6 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @Column(nullable = false)
-    private boolean isInitialPasswordResetSent;
-
-    @Column
-    private LocalDateTime lastPasswordResetUpdate;
-
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

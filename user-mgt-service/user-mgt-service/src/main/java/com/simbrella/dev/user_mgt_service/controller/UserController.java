@@ -19,7 +19,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Set;
 
 
@@ -37,7 +39,12 @@ public class UserController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Request successfully processed")
     @PostMapping()
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(@Valid @RequestBody UserRequestDto userDto) {
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", userService.createUser(userDto)));
+       UserResponseDto responseDto = userService.createUser(userDto);
+       URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+               .path("{id}")
+               .buildAndExpand(responseDto.getId())
+               .toUri();
+        return ResponseEntity.created(location).body(new ApiResponse<>(true, "Request Successfully processed", responseDto));
     }
 
     @GetMapping("/{id}")
@@ -67,7 +74,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable(value = "id") @Positive(message = "User ID must be a positive number") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") @Positive(message = "User ID must be a positive number") Long id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
