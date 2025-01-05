@@ -7,6 +7,7 @@ import com.simbrella.dev.user_mgt_service.enums.Roles;
 import com.simbrella.dev.user_mgt_service.enums.UserStatus;
 import com.simbrella.dev.user_mgt_service.exception.CustomValidationException;
 import com.simbrella.dev.user_mgt_service.exception.UserAlreadyExistException;
+import com.simbrella.dev.user_mgt_service.exception.UserNotFoundException;
 import com.simbrella.dev.user_mgt_service.repository.UserRepository;
 import com.simbrella.dev.user_mgt_service.service.UserService;
 import com.simbrella.dev.user_mgt_service.util.AppUtil;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,13 @@ public class UserServiceImpl implements UserService {
 
         newUser = userRepository.save(newUser);
         return appUtil.mapToDto(newUser);
+    }
+
+    @Override
+    public UserResponseDto getUserDetails(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + id, NOT_FOUND.name()));
+        return appUtil.mapToDto(user);
     }
 
 

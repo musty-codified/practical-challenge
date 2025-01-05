@@ -7,15 +7,14 @@ import com.simbrella.dev.user_mgt_service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "user-mgt-endpoint", description = "These endpoints exposes user-management-API")
@@ -33,5 +32,15 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(@Valid @RequestBody UserRequestDto userDto) {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", userService.createUser(userDto)));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserDetails(@PathVariable(value = "id") @Positive(message = "User ID must be a positive number") Long id) {
+        if (id == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ApiResponse<>(false, "ID is required", null));
+        }
+        UserResponseDto user = userService.getUserDetails(id);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", user));
     }
 }
