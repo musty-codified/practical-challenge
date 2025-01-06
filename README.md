@@ -26,7 +26,7 @@ The application can be deployed on any Java Servlet container, or docker contain
 * **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
 
        cd loan-mgt-service
-*  Configure Environment: `Update application.yml` with your PostgreSQL and Memcached configurations:
+*  Configure Environment: Update `application.yml` with your MySQL and Memcached configurations:
 * **Build the project using maven:** mvn clean install
 * **Run the application from the command line:** mvn spring-boot:run
 * **Access APIs: Swagger documentation is available at: http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html**
