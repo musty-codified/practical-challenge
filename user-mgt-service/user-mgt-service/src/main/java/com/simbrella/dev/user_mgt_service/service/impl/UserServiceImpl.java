@@ -15,6 +15,7 @@ import com.simbrella.dev.user_mgt_service.util.AppUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class  UserServiceImpl implements UserService {
     private final AppUtil appUtil;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     @Override
     public UserResponseDto createUser(UserRequestDto userDto) {
 
@@ -46,7 +48,7 @@ public class  UserServiceImpl implements UserService {
 
         User newUser = appUtil.getMapper().convertValue(userDto, User.class);
         newUser.setStatus(UserStatus.INACTIVE);
-        newUser.setPassword("######passsword");
+        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setRole(Roles.ROLE_USER.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
 
         newUser = userRepository.save(newUser);
@@ -78,7 +80,6 @@ public class  UserServiceImpl implements UserService {
         if (userUpdate.getLastName() != null) {
             existingUser.setLastName(userUpdate.getLastName());
         }
-
 
         if (userUpdate.getStatus() != null) {
             existingUser.setStatus(UserStatus.valueOf(userUpdate.getStatus()));
