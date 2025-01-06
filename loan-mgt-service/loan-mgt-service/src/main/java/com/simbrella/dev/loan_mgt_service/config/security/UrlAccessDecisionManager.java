@@ -36,6 +36,7 @@ public class UrlAccessDecisionManager implements AuthorizationManager<RequestAut
         }
         if (authentication.get().getAuthorities().parallelStream()
                 .map(GrantedAuthority::getAuthority)
+                .map(String::toLowerCase)
                 .anyMatch(authority -> authority.equals("user.edit") || authority.equals("user.read"))) {
             return new AuthorizationDecision(true);
         }

@@ -18,6 +18,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.util.List;
 
 
 @Tag(name = "loan-mgt-endpoint", description = "These endpoints exposes loan-management-API")
@@ -39,13 +40,13 @@ public class LoanController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<LoanDto>> getLoanDetailsByUser(@PathVariable(value = "id") @Positive(message = "Loan ID must be a positive") Long id) {
+    public ResponseEntity<ApiResponse<List<LoanDto>>> getLoanDetailsByUser(@PathVariable(value = "id") @Positive(message = "Loan ID must be a positive") Long id) {
         if (id == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ApiResponse<>(false, "ID is required", null));
         }
-        LoanDto user = loanService.fetchLoanDetailsByUser(id);
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", user));
+
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.fetchLoanDetailsByUser(id)));
     }
 
     @PutMapping("/{id}/status")
