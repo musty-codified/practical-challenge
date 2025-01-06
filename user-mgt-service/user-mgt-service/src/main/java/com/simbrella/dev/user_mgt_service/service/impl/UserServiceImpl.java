@@ -13,6 +13,7 @@ import com.simbrella.dev.user_mgt_service.repository.UserRepository;
 import com.simbrella.dev.user_mgt_service.service.UserService;
 import com.simbrella.dev.user_mgt_service.util.AppUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class  UserServiceImpl implements UserService {
@@ -35,6 +37,9 @@ public class  UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new UserAlreadyExistException("User with email {" + userDto.getEmail() + "} already exists");
         }
+
+        boolean isPhoneExist = isPhoneNumberExist(appUtil.getFormattedNumber(userDto.getPhoneNumber()));
+        log.info("IsPhone exist:{}", isPhoneExist);
         if (isPhoneNumberExist(appUtil.getFormattedNumber(userDto.getPhoneNumber()))) {
             throw new UserAlreadyExistException("Phone number already exists");
         }

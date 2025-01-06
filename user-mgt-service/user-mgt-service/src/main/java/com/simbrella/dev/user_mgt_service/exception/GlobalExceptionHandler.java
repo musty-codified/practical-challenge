@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiResponse<String>> handleUserAlreadyExistException(UserNotFoundException e) {
+    public ResponseEntity<ApiResponse<String>> handleUserNotFoundException(UserNotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, NOT_FOUND);
     }

@@ -15,7 +15,7 @@ public class AppUtil {
         return validator.isValid(email);
     }
 
-    public String getFormattedNumber(final  String number){
+    public String getFormattedNumber(final String number){
         String trimmedNumber = number.trim();
         String formattedNumber = null;
         if(trimmedNumber.startsWith("0")){
@@ -25,7 +25,7 @@ public class AppUtil {
             formattedNumber = "+" + number;
 
         else if (!number.startsWith("+") && Integer.parseInt(String.valueOf(number.charAt(0))) > 0){
-            formattedNumber ="234" + number;
+            formattedNumber ="+234" + number;
         }
         return formattedNumber;
     }
@@ -35,7 +35,7 @@ public class AppUtil {
             throw new IllegalArgumentException("Invalid email format. Email must include a domain");
         }
 
-        if (email == null || !email.contains("@") || email.startsWith("@")) {
+        if (!email.contains("@") || email.startsWith("@")) {
             throw new IllegalArgumentException("Invalid email format. Email must contain a username before the '@' symbol.");
         }
 
