@@ -14,9 +14,6 @@ public class LoanRequestDto implements Serializable {
 
     private static final long serialVersionUID= 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false)
     @NotBlank(message = "amount is required")
@@ -34,6 +31,8 @@ public class LoanRequestDto implements Serializable {
     @NotBlank(message = "interestRate is required")
     @JsonProperty
     private BigDecimal interestRate;
+
+    private Long userId;
 
 
 }
