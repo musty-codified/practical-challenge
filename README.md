@@ -25,17 +25,17 @@ The application can be deployed on any Java Servlet container, or docker contain
 *  Ensure Maven is installed and running on your machine before you run this service.
 * **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
 
--      cd loan-mgt-service
-*  Configure Environment: Update application.yml with your PostgreSQL and Memcached configurations:
+       cd loan-mgt-service
+*  Configure Environment: `Update application.yml` with your PostgreSQL and Memcached configurations:
 * **Build the project using maven:** mvn clean install
 * **Run the application from the command line:** mvn spring-boot:run
-* **Access APIs: Swagger documentation is available at: http://localhost:8080/swagger-ui.html**
+* **Access APIs: Swagger documentation is available at: http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html**
 
 ## Explanation of Design Decisions ##
 
 ---
 1.  Microservice Architecture
-   Why: The architecture ensures modularity, scalability, and independent deployment.
+    Why: The architecture ensures modularity, scalability, and independent deployment.
    Trade-offs: Increased complexity in inter-service communication and management.
 2. Database Design
    Choice: MySQL is chosen for its reliability and support for complex queries.
