@@ -1,4 +1,4 @@
-# Fintech-Backend-API
+#  Backend Engineer Practical Challenge: Fintech-Backend-API
 The backend api for a fintech application
 
 
@@ -13,11 +13,19 @@ Following tools were used during the development of the API :
 - **Swagger** 
 - **JWT**
 
+---
+
+
 ### Authentication and Authorization
 Uses Spring Security with JWT for stateless authentication and authorization.
 
+---
+
+
 ### Deployment
 The application can be deployed on any Java Servlet container, or docker containers.
+
+---
 
 ## Running the server locally ##
 *  Ensure Maven is installed and running on your machine before you run this service.
