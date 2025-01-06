@@ -6,8 +6,10 @@ import com.simbrella.dev.loan_mgt_service.dto.request.UpdateLoanRequest;
 import com.simbrella.dev.loan_mgt_service.dto.response.LoanDto;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 public interface LoanService {
-    LoanDto fetchLoanDetailsByUser (Long loanId);
+    List<LoanDto> fetchLoanDetailsByUser (Long loanId);
 
     LoanDto applyLoan(@Valid LoanRequestDto loanDto);
 

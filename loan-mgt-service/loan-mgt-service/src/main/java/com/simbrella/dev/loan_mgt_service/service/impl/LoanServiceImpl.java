@@ -12,6 +12,7 @@ import com.simbrella.dev.loan_mgt_service.exception.LoanNotFoundException;
 import com.simbrella.dev.loan_mgt_service.repository.LoanRepository;
 import com.simbrella.dev.loan_mgt_service.service.LoanService;
 import com.simbrella.dev.loan_mgt_service.util.AppUtil;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,18 +33,20 @@ public class LoanServiceImpl implements LoanService {
     private final UserClient userClient;
 
     @Override
-    public LoanDto fetchLoanDetailsByUser(Long loanId) {
-       Loan loan = loanRepository.findById(loanId)
-               .orElseThrow(()-> new LoanNotFoundException("Loan not found", HttpStatus.NOT_FOUND.name()));
-        Map<String, Object> responseMap = userClient.fetchUserDetails(loan.getUserId());
+    public List<LoanDto> fetchLoanDetailsByUser(Long userId) {
+       List<Loan> loans = loanRepository.findByUserId(userId);
+        Map<String, Object> responseMap = userClient.fetchUserDetails(userId);
         UserResponseDTO userResponse = parseResponse(responseMap);
-        LoanDto loanDto = appUtil.mapToDto(loan);
-        loanDto.setFullName(userResponse.getFirstName() + userResponse.getLastName());
-        loanDto.setPhoneNumber(userResponse.getPhoneNumber());
-        return loanDto;
+        return loans.stream().map(loan -> {
+            LoanDto loanDto = appUtil.mapToDto(loan);
+            loanDto.setFullName(userResponse.getFirstName() + userResponse.getLastName());
+            loanDto.setPhoneNumber(userResponse.getPhoneNumber());
+            return loanDto;
+        })
+                .collect(Collectors.toList());
+
 
     }
-
     @Override
     public LoanDto applyLoan(LoanRequestDto loanDto) {
         Map<String, Object> responseMap = userClient.fetchUserDetails(loanDto.getUserId());
@@ -55,7 +59,7 @@ public class LoanServiceImpl implements LoanService {
                             .interestRate(BigDecimal.ZERO)
                             .build());
             loan.setAmount(loanDto.getAmount());
-            loan.setInterestRate(loanDto.getInterestRate());
+            loan.setInterestRate(computeInterestRate(loanDto.getAmount(), loanDto.getTenureInMonth()));
             loan.setCreatedAt(LocalDateTime.now());
             loan.setStatus(Status.PENDING);
 
@@ -74,6 +78,13 @@ public class LoanServiceImpl implements LoanService {
         }
 
         return null;
+    }
+
+    private BigDecimal computeInterestRate(@NotBlank(message = "amount is required") BigDecimal amount,
+                                           @NotBlank(message = "tenureInMonth is required") Integer tenureInMonth) {
+        BigDecimal baseRate = BigDecimal.valueOf(0.05);
+        BigDecimal additionalRate = BigDecimal.valueOf(0.01).multiply(BigDecimal.valueOf(tenureInMonth / 12));
+        return baseRate.add(additionalRate).multiply(amount);
     }
 
     @Override
