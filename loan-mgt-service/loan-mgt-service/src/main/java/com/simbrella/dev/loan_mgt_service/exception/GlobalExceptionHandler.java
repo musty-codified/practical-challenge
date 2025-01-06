@@ -48,13 +48,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LoanAlreadyExistException.class)
-    public ResponseEntity<ApiResponse<String>> handleUserAlreadyExistException(LoanAlreadyExistException e) {
+    public ResponseEntity<ApiResponse<String>> handleLoanAlreadyExistException(LoanAlreadyExistException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, e.getStatus());
     }
 
     @ExceptionHandler(LoanNotFoundException.class)
-    public ResponseEntity<ApiResponse<String>> handleUserNotFoundException(LoanNotFoundException e) {
+    public ResponseEntity<ApiResponse<String>> handleLoanNotFoundException(LoanNotFoundException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, NOT_FOUND);
     }

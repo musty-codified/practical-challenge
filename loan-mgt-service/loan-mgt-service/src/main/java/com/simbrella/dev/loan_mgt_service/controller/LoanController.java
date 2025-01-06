@@ -49,13 +49,8 @@ public class LoanController {
     }
 
     @PutMapping("/{id}/status")
-
     public ResponseEntity<ApiResponse<LoanDto>> updateLoanStatus(@PathVariable("id") Long loanId,
-                                                                 @Validated() @RequestBody UpdateLoanRequest updateRequest) throws NoHandlerFoundException {
-        if(updateRequest.getStatus() !=null) {
-            validator.validate(updateRequest);
-
-        }
+                                                                 @Validated() @RequestBody UpdateLoanRequest updateRequest)  {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.updateLoan(loanId, updateRequest)));
 
     }

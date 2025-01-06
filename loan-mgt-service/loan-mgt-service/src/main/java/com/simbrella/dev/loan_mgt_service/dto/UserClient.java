@@ -10,5 +10,5 @@ import java.util.Map;
 @FeignClient(name = "user-mgt-service", url = "${user.url}", configuration = FeignClientConfig.class)
 public interface UserClient {
     @GetMapping("/{userId}")
-    Map<String, Object> fetchLoanDetailsByUser(@PathVariable("userId") Long userId);
+    Map<String, Object> fetchUserDetails(@PathVariable("userId") Long userId);
 }

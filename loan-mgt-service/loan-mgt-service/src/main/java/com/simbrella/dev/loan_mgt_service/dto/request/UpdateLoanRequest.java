@@ -23,7 +23,6 @@ public class UpdateLoanRequest implements Serializable {
     @JsonProperty
     @Schema(description = "loan status")
     @NotBlank(message = "First name is required")
-
     @Pattern(regexp = "^(|PENDING|APPROVED|REJECTED|DISBURSED)$", message = "Status can only be either of PENDING, APPROVED, REJECTED, DISBURSED" )
     private String status;
 

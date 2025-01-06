@@ -1,6 +1,5 @@
 package com.simbrella.dev.loan_mgt_service.service.impl;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simbrella.dev.loan_mgt_service.dto.UserClient;
 import com.simbrella.dev.loan_mgt_service.dto.request.LoanRequestDto;
@@ -35,7 +34,7 @@ public class LoanServiceImpl implements LoanService {
     public LoanDto fetchLoanDetailsByUser(Long loanId) {
        Loan loan = loanRepository.findById(loanId)
                .orElseThrow(()-> new LoanNotFoundException("Loan not found", HttpStatus.NOT_FOUND.name()));
-        Map<String, Object> responseMap = userClient.fetchLoanDetailsByUser(loan.getUserId());
+        Map<String, Object> responseMap = userClient.fetchUserDetails(loan.getUserId());
         UserResponseDTO userResponse = parseResponse(responseMap);
         LoanDto loanDto = appUtil.mapToDto(loan);
         loanDto.setFullName(userResponse.getFirstName() + userResponse.getLastName());
@@ -46,7 +45,7 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDto applyLoan(LoanRequestDto loanDto) {
-        Map<String, Object> responseMap = userClient.fetchLoanDetailsByUser(loanDto.getUserId());
+        Map<String, Object> responseMap = userClient.fetchUserDetails(loanDto.getUserId());
         UserResponseDTO userResponse = parseResponse(responseMap);
         if(loanDto.getUserId() != null) {
             Loan loan = loanRepository.findById(loanDto.getUserId()).orElse(
@@ -60,10 +59,8 @@ public class LoanServiceImpl implements LoanService {
             loan.setCreatedAt(LocalDateTime.now());
             loan.setStatus(Status.PENDING);
 
-            // Save or update the loan in the repository
             Loan savedLoan = loanRepository.save(loan);
 
-            // Return a DTO response
             return LoanDto.builder()
                     .id(savedLoan.getId())
                     .amount(savedLoan.getAmount())
@@ -81,7 +78,10 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDto updateLoan(Long loanId, UpdateLoanRequest updateRequest) {
-        return null;
+        Loan loan = loanRepository.findById(loanId).orElseThrow(()-> new LoanNotFoundException("Loan not found", HttpStatus.NOT_FOUND.name()));
+        loan.setStatus(Status.valueOf(updateRequest.getStatus()));
+        loanRepository.save(loan);
+        return appUtil.mapToDto(loan);
     }
 
     private UserResponseDTO parseResponse(Map<String, Object> response) {
