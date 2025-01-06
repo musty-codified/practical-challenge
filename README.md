@@ -16,30 +16,25 @@ Following tools were used during the development of the API :
 ---
 
 
-### Authentication and Authorization
-Uses Spring Security with JWT for stateless authentication and authorization.
-
----
-
-
-### Deployment
+## Deployment ##
 The application can be deployed on any Java Servlet container, or docker containers.
 
 ---
 
 ## Running the server locally ##
 *  Ensure Maven is installed and running on your machine before you run this service.
-* **Clone the repository:** git clone [practical-challenge-repository]://github.com/musty-codified/practical-challenge.git
-*   cd loan-mgt-service
-*  ** Configure Environment: Update application.yml with your PostgreSQL and Memcached configurations:
+* **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
+
+-      cd loan-mgt-service
+*  Configure Environment: Update application.yml with your PostgreSQL and Memcached configurations:
 * **Build the project using maven:** mvn clean install
 * **Run the application from the command line:** mvn spring-boot:run
 * **Access APIs: Swagger documentation is available at: http://localhost:8080/swagger-ui.html**
 
-### Explanation of Design Decisions
+## Explanation of Design Decisions ##
 
 ---
-1. Microservice Architecture
+1.  Microservice Architecture
    Why: The architecture ensures modularity, scalability, and independent deployment.
    Trade-offs: Increased complexity in inter-service communication and management.
 2. Database Design
@@ -51,7 +46,7 @@ The application can be deployed on any Java Servlet container, or docker contain
    Trade-offs: Slightly more overhead in token generation and validation.
 
 
-### API Documentation
+## API Documentation ##
 API documentation is available via Swagger:
 
 
