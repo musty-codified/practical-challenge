@@ -27,8 +27,8 @@ The backend api for a fintech application
 - **Build the project using maven:** mvn clean install
 - **Run the application from the command line:** mvn spring-boot:run
 - **Access APIs: Swagger documentation is available at:**
-- http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html 
-- http://localhost:8081/loan-mgt-service/api/v1/swagger-ui.html
+ http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html 
+ http://localhost:8081/loan-mgt-service/api/v1/swagger-ui.html
  
 
 ## 4. Explanation of Design Decisions ##
@@ -47,7 +47,6 @@ The backend api for a fintech application
 ### 4.4 Consolidated Transaction Service in Loan Service
 - Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity in this use case.
 - Trade-offs: Transactions are tightly coupled with loan logic.
-
 
 ## API Documentation ##
 The services expose REST APIs for managing loans and transactions as per the task description document
