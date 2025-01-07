@@ -1,7 +1,6 @@
 package com.simbrella.dev.user_mgt_service.config.security;
 
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,10 +18,4 @@ import java.util.List;
 public class PermissionConfig {
     private List<PermissionMapping> permissions = new ArrayList<>();
 
-    @PostConstruct
-    public void validate(){
-        if (permissions == null || permissions.isEmpty()){
-            throw new IllegalArgumentException("Permissions are not loaded. Check application.yml configuration");
-        }
-    }
 }

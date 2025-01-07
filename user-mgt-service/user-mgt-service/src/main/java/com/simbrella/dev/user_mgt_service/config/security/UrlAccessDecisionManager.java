@@ -27,9 +27,12 @@ public class UrlAccessDecisionManager implements AuthorizationManager<RequestAut
 
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
-        List<String> whitelistedUrls = Arrays.asList("/swagger-ui/**", "/v3/api-docs/**", "/auth/**", "/users");
+        List<String> whitelistedUrls = Arrays.asList("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/auth/**");
 
         String requestedUrl = object.getRequest().getRequestURI().substring(contextPath.length()).toLowerCase();
+        log.info("Requested URL: {}", requestedUrl);
+        log.info("whitelisted URL: {}", whitelistedUrls);
+        log.info("contextPath URL: {}", contextPath);
         String requestedMethod = object.getRequest().getMethod();
         if (whitelistedUrls.stream().anyMatch(e->pathMatcher.match(e, requestedUrl))){
             return new AuthorizationDecision(true);

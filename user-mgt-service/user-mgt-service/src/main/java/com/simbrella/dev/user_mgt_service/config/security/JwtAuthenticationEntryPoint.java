@@ -1,7 +1,5 @@
 package com.simbrella.dev.user_mgt_service.config.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simbrella.dev.user_mgt_service.constant.Constants;
 import com.simbrella.dev.user_mgt_service.dto.response.ApiResponse;
 import com.simbrella.dev.user_mgt_service.util.AppUtil;
 import jakarta.servlet.ServletException;
