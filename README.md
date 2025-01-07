@@ -27,8 +27,9 @@ The backend api for a fintech application
 - **Build the project using maven:** mvn clean install
 - **Run the application from the command line:** mvn spring-boot:run
 - **Access APIs: Swagger documentation is available at:**
-  [user-mgt-service](http://localhost:8080/user-mgt-service/api/v1/swagger-ui/index.html#)
-  [loan-mgt-service](http://localhost:8081/loan-mgt-service/api/v1/swagger-ui/index.html#)
+  [user-service swagger UI](http://localhost:8080/user-mgt-service/api/v1/swagger-ui/index.html#)
+
+  [loan-service swagger UI](http://localhost:8081/loan-mgt-service/api/v1/swagger-ui/index.html#)
  
 
 ## 4. Explanation of Design Decisions ##
