@@ -44,6 +44,10 @@ The application can be deployed on any Java Servlet container, or docker contain
 3. JWT Authentication
    Why: Secure, stateless authentication for inter-service communication.
    Trade-offs: Slightly more overhead in token generation and validation.
+4. Consolidated Transaction Service in Loan Service
+   Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity in this use case.
+   Trade-offs: Transactions are tightly coupled with loan logic.
+    
 
 
 ## API Documentation ##
