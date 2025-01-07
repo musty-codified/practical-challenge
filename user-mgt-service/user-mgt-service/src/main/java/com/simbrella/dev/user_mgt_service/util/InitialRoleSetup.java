@@ -26,23 +26,22 @@ public class InitialRoleSetup {
     @EventListener
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event){
-        log.info("Initializing roles and permissions...");
 
         if (!userRepository.existsByEmail("musty@gmail.com")){
             System.out.println("Initializing Admin User");
 
-            User superAdminUser = new User();
-            superAdminUser.setStatus(UserStatus.ACTIVE);
-            superAdminUser.setUpdatedAt(LocalDateTime.now());
-            superAdminUser.setCreatedAt(LocalDateTime.now());
-            superAdminUser.setPhoneNumber("8166099828");
-            superAdminUser.setPassword(passwordEncoder.encode("0bv20S!ecQgdqd?o8bCWb~f>2J4Z(#}tuRARy12B>E9v]i=$OAsC"));
-            superAdminUser.setEmail("musty@gmail.com");
-            superAdminUser.setRole(ROLE_ADMIN.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
-            superAdminUser.setFirstName("Papi");
-            superAdminUser.setLastName("Marciano");
-            superAdminUser.setId(1L);
-            userRepository.save(superAdminUser);
+            User admin = new User();
+            admin.setStatus(UserStatus.ACTIVE);
+            admin.setUpdatedAt(LocalDateTime.now());
+            admin.setCreatedAt(LocalDateTime.now());
+            admin.setPhoneNumber("8166099828");
+            admin.setPassword(passwordEncoder.encode("0bv20S!ecQgdqd?o8bCWb~f>2J4Z(#}tuRARy12B>E9v]i=$OAsC"));
+            admin.setEmail("musty@gmail.com");
+            admin.setRole(ROLE_ADMIN.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
+            admin.setFirstName("Papi");
+            admin.setLastName("Marciano");
+            admin.setId(1L);
+            userRepository.save(admin);
             System.out.println("Amin user created");
 
         } else {

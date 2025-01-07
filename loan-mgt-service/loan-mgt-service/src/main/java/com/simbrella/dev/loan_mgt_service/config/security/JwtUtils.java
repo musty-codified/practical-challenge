@@ -8,10 +8,16 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -43,6 +49,18 @@ public class JwtUtils {
     public String getUsernameFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
+
+    public UserDetails getDetailsFromToken(String token) {
+        Claims allClaimsFromToken = getAllClaimsFromToken(token);
+        String role = allClaimsFromToken.get("role").toString();
+        List<SimpleGrantedAuthority> authorities = Arrays.stream(role.split(","))
+                .map(String::trim)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        String email = allClaimsFromToken.get("email").toString();
+        return new User(email, "", authorities);
+    }
+
     public Date getExpirationDateFromToken(String token) {
         return getAllClaimsFromToken(token).getExpiration();
     }

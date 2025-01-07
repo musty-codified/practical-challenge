@@ -2,7 +2,6 @@ package com.simbrella.dev.loan_mgt_service.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simbrella.dev.loan_mgt_service.dto.response.ErrorResponse;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,19 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -52,17 +47,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
             String token = authorization.substring("Bearer ".length());
-
+            UserDetails detailsFromToken = jwtUtil.getDetailsFromToken(token);
             String usernameFromToken = jwtUtil.getUsernameFromToken(token);
-            Claims claims = jwtUtil.getAllClaimsFromToken(token);
 
-            String roles = claims.get("role", String.class);
-            List<GrantedAuthority> authorities = Arrays.stream(roles.split(",")).map(String::trim)
-                    .map(this::mapRoleToPermission).flatMap(List::stream)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usernameFromToken, null, authorities);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usernameFromToken,
+                    null, detailsFromToken.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
@@ -75,15 +64,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             log.error(e.getMessage(), e);
             sendError(response, "An unknown error occurred during authentication");
         }
-    }
-
-    private List<String> mapRoleToPermission(String role) {
-        return switch (role) {
-            case "USER_READ" -> List.of("user.read");
-            case "USER_EDIT" -> List.of("user.edit");
-            case "USER_DELETE" -> List.of("user.delete");
-            default -> List.of();
-        };
     }
 
     private void sendError(@NotNull HttpServletResponse response, String message) throws IOException {
