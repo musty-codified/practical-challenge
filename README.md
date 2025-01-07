@@ -31,24 +31,23 @@ The application can be deployed on any Java Servlet container, or docker contain
 - **Run the application from the command line:** mvn spring-boot:run
 - **Access APIs: Swagger documentation is available at: http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html**
 
-## Explanation of Design Decisions ##
+## 4. Explanation of Design Decisions ##
 
 ---
-1.  Microservice Architecture
-    Why: The architecture ensures modularity, scalability, and independent deployment.
-   Trade-offs: Increased complexity in inter-service communication and management.
-2. Database Design
-   Choice: MySQL is chosen for its reliability and support for complex queries.
-   Normalization: The database is normalized to avoid redundancy and ensure data consistency.
-   Trade-offs: Slightly more complex schema but ensures efficient updates and queries.
-3. JWT Authentication
-   Why: Secure, stateless authentication for inter-service communication.
-   Trade-offs: Slightly more overhead in token generation and validation.
-4. Consolidated Transaction Service in Loan Service
-   Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity in this use case.
-   Trade-offs: Transactions are tightly coupled with loan logic.
+### 4.1 Microservice Architecture
+- Why: The architecture ensures modularity, scalability, and independent deployment.
+- Trade-offs: Increased complexity in inter-service communication and management.
+### 4.2 Database Design
+- Choice: MySQL is chosen for its reliability and support for complex queries.
+- Normalization: The database is normalized to avoid redundancy and ensure data consistency.
+- Trade-offs: Slightly more complex schema but ensures efficient updates and queries.
+### 4.3 JWT Authentication
+- Why: Secure, stateless authentication for inter-service communication.
+- Trade-offs: Slightly more overhead in token generation and validation.
+### 4.4 Consolidated Transaction Service in Loan Service
+- Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity in this use case.
+- Trade-offs: Transactions are tightly coupled with loan logic.
     
-
 
 ## API Documentation ##
 API documentation is available via Swagger:
