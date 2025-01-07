@@ -23,7 +23,7 @@ The backend api for a fintech application
 
        cd user-mgt-service
        cd loan-mgt-service
-- **Configure Environment:** Update `application.yml` with your MySQL and Memcached configurations:
+- **Configure Environment:** Update `application.yml` with your MySQL configurations:
 - **Build the project using maven:** mvn clean install
 - **Run the application from the command line:** mvn spring-boot:run
 - **Access APIs: Swagger documentation is available at:**
@@ -44,8 +44,8 @@ The backend api for a fintech application
 ### 4.3 Spring Security with JWT Authentication
 - Why: Secure, stateless authentication for inter-service communication.
 - Trade-offs: Slightly more overhead in token generation and validation.
-### 4.4 Consolidated Transaction Service in Loan Service
-- Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity in this use case.
+### 4.4 Consolidated Transaction Processing in Loan Service
+- Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity.
 - Trade-offs: Transactions are tightly coupled with loan logic.
 
 ## API Documentation ##
