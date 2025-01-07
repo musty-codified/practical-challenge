@@ -4,7 +4,7 @@ The backend api for a fintech application
 
 `Built with Spring Boot, secured with Spring Security (JWT), documented with Swagger (API)`
 
-## Tools used ##
+## 1. Tools used ##
 Following tools were used during the development of the API :
 - **Java 17**
 - **Spring Boot**
@@ -16,20 +16,20 @@ Following tools were used during the development of the API :
 ---
 
 
-## Deployment ##
+## 2. Deployment ##
 The application can be deployed on any Java Servlet container, or docker containers.
 
 ---
 
-## Running the server locally ##
-*  Ensure Maven is installed and running on your machine before you run this service.
-* **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
+## 3. Running the server locally ##
+-   Ensure Maven is installed and running on your machine before you run this service.
+- **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
 
        cd loan-mgt-service
-*  Configure Environment: Update `application.yml` with your MySQL and Memcached configurations:
-* **Build the project using maven:** mvn clean install
-* **Run the application from the command line:** mvn spring-boot:run
-* **Access APIs: Swagger documentation is available at: http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html**
+- **Configure Environment:** Update `application.yml` with your MySQL and Memcached configurations:
+- **Build the project using maven:** mvn clean install
+- **Run the application from the command line:** mvn spring-boot:run
+- **Access APIs: Swagger documentation is available at: http://localhost:8080/user-mgt-service/api/v1/swagger-ui.html**
 
 ## Explanation of Design Decisions ##
 
