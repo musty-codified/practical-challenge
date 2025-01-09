@@ -20,7 +20,6 @@ import static com.simbrella.dev.user_mgt_service.enums.Roles.ROLE_ADMIN;
 @Component
 @Slf4j
 public class InitialRoleSetup {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     @EventListener
@@ -35,12 +34,11 @@ public class InitialRoleSetup {
             admin.setUpdatedAt(LocalDateTime.now());
             admin.setCreatedAt(LocalDateTime.now());
             admin.setPhoneNumber("8166099828");
-            admin.setPassword(passwordEncoder.encode("0bv20S!ecQgdqd?o8bCWb~f>2J4Z(#}tuRARy12B>E9v]i=$OAsC"));
+            admin.setPassword(passwordEncoder.encode("0bv20S!ecQgd"));
             admin.setEmail("musty@gmail.com");
             admin.setRole(ROLE_ADMIN.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
             admin.setFirstName("Papi");
             admin.setLastName("Marciano");
-            admin.setId(1L);
             userRepository.save(admin);
             System.out.println("Amin user created");
 

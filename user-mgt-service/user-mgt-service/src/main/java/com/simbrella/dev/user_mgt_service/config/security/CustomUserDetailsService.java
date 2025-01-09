@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .map(String::trim)
                         .map(this::mapRoleToPermission)
                         .flatMap(List::stream)
-                .map(SimpleGrantedAuthority::new)
+                        .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList()));
     }
 

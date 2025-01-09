@@ -3,7 +3,6 @@ package com.simbrella.dev.user_mgt_service.service.impl;
 import com.simbrella.dev.user_mgt_service.config.security.CustomUserDetailsService;
 import com.simbrella.dev.user_mgt_service.config.security.JwtUtils;
 import com.simbrella.dev.user_mgt_service.dto.request.LoginRequestDto;
-import com.simbrella.dev.user_mgt_service.dto.response.ApiResponse;
 import com.simbrella.dev.user_mgt_service.dto.response.LoginResponseDto;
 import com.simbrella.dev.user_mgt_service.entity.User;
 import com.simbrella.dev.user_mgt_service.enums.UserStatus;
@@ -11,8 +10,7 @@ import com.simbrella.dev.user_mgt_service.exception.UnAuthorizedException;
 import com.simbrella.dev.user_mgt_service.exception.UserNotFoundException;
 import com.simbrella.dev.user_mgt_service.repository.UserRepository;
 import com.simbrella.dev.user_mgt_service.service.AuthService;
-import com.simbrella.dev.user_mgt_service.util.AppUtil;
-import com.simbrella.dev.user_mgt_service.util.CustomMapper;
+import com.simbrella.dev.user_mgt_service.util.LocalStorage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
+    private final LocalStorage localStorage;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -62,7 +61,9 @@ public class AuthServiceImpl implements AuthService {
             }
             log.info("Generating Access token for user {}", user.getEmail());
             final String accessToken = jwtUtil.generateToken(userDetailsService.loadUserByUsername(user.getEmail()));
-
+            localStorage.save(user.getEmail(), accessToken, jwtExpiration.intValue());
+           String value = localStorage.getValueByKey(user.getEmail());
+            log.info("Token value:{}", value);
             return LoginResponseDto.builder()
                     .id(user.getId())
                     .firstName(user.getFirstName())

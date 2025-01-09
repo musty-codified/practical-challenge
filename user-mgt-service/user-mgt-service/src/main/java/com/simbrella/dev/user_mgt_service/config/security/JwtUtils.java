@@ -32,15 +32,14 @@ public class JwtUtils {
 
     @PostConstruct
     public void init() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret); // Decode Base64-encoded secret
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
     public Claims getAllClaimsFromToken(String token) {
         try {
 
             token = token.trim();
-            String[] parts = token.split("\\.");
-            String header = new String(Decoders.BASE64.decode(parts[0]));
+            log.info("JWT Token: {}", token);
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (Exception  e){
             throw new RuntimeException("Failed to parse token: " + e.getMessage(), e);
@@ -64,11 +63,17 @@ public class JwtUtils {
         claims.put("role", userDetails.getAuthorities().stream()
                 .map(Objects::toString).collect(Collectors.joining(",")));
         claims.put("email", userDetails.getUsername());
+        for (Map.Entry<String,String> entry : claims.entrySet())
+            System.out.println("Key = " + entry.getKey() +
+                    ", Value = " + entry.getValue());
+       String token = doGenerateToken(claims, userDetails.getUsername(), jwtExpiration);
+        System.out.println("JWT Token: " + token);
         return doGenerateToken(claims, userDetails.getUsername(), jwtExpiration);
+
     }
 
     private String doGenerateToken(Map<String, String> claims, String email, Long jwtExpiration) {
-        Long expirationTimeSeconds = jwtExpiration; //in second
+        Long expirationTimeSeconds = jwtExpiration; //in seconds
         Long expirationTimeMillis = expirationTimeSeconds * 1000 ;
 
         final Date createdDate = new Date(System.currentTimeMillis());

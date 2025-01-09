@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 @Setter
 public class UnAuthorizedException extends RuntimeException {
     private String message;
-    private String httpStatus;
+//    private String httpStatus;
 
-    public UnAuthorizedException(String message, HttpStatus httpStatus) {
-        this.httpStatus = String.valueOf(httpStatus);
+    public UnAuthorizedException(String message) {
+//        this.httpStatus = String.valueOf(httpStatus);
         this.message = message;
 
     }

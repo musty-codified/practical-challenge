@@ -45,7 +45,6 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ApiResponse<>(false, "ID is required", null));
         }
-
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.fetchLoanDetailsByUser(id)));
     }
 

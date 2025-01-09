@@ -53,8 +53,7 @@ public class JwtUtils {
     public UserDetails getDetailsFromToken(String token) {
         Claims allClaimsFromToken = getAllClaimsFromToken(token);
         String role = allClaimsFromToken.get("role").toString();
-        List<SimpleGrantedAuthority> authorities = Arrays.stream(role.split(","))
-                .map(String::trim)
+        List<SimpleGrantedAuthority> authorities = Arrays.stream(role.split(",")).map(String::trim)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         String email = allClaimsFromToken.get("email").toString();
@@ -65,7 +64,7 @@ public class JwtUtils {
         return getAllClaimsFromToken(token).getExpiration();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return getExpirationDateFromToken(token).before(new Date());
     }
 

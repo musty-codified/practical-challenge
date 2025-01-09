@@ -14,6 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -29,15 +30,16 @@ public class UrlAccessDecisionManager implements AuthorizationManager<RequestAut
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         List<String> whitelistedUrls = Arrays.asList("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
                 "/auth/**", "/users");
-
         String requestedUrl = object.getRequest().getRequestURI().substring(contextPath.length()).toLowerCase();
         log.info("Requested URL: {}", requestedUrl);
-        log.info("whitelisted URL: {}", whitelistedUrls);
-        log.info("contextPath URL: {}", contextPath);
         String requestedMethod = object.getRequest().getMethod();
         if (whitelistedUrls.stream().anyMatch(e->pathMatcher.match(e, requestedUrl))){
             return new AuthorizationDecision(true);
         }
+
+        log.info("Print Permissions:{}", authentication.get().getAuthorities().parallelStream()
+                .map(GrantedAuthority::getAuthority)
+                .map(String::toLowerCase).collect(Collectors.joining(",")));
 
         boolean match = authentication.get().getAuthorities().parallelStream()
                 .map(GrantedAuthority::getAuthority)

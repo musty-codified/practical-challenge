@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
-@FeignClient(name = "user-mgt-service", url = "${user.url}", configuration = FeignClientConfig.class)
+@FeignClient(name = "user-mgt-service", url = "${user-mgt-service.url}", configuration = FeignClientConfig.class)
 public interface UserClient {
     @GetMapping("/{userId}")
     Map<String, Object> fetchUserDetails(@PathVariable("userId") Long userId);

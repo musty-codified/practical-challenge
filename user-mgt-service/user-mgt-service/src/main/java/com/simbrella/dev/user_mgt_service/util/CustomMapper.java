@@ -2,7 +2,6 @@ package com.simbrella.dev.user_mgt_service.util;
 
 import com.simbrella.dev.user_mgt_service.dto.response.UserResponseDto;
 import com.simbrella.dev.user_mgt_service.entity.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 

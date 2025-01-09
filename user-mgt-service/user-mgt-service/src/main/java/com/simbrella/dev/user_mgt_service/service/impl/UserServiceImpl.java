@@ -1,5 +1,6 @@
 package com.simbrella.dev.user_mgt_service.service.impl;
 
+import com.simbrella.dev.user_mgt_service.dto.EmailDto;
 import com.simbrella.dev.user_mgt_service.dto.request.UpdateUserRequest;
 import com.simbrella.dev.user_mgt_service.dto.request.UserRequestDto;
 import com.simbrella.dev.user_mgt_service.dto.response.UserResponseDto;
@@ -10,8 +11,11 @@ import com.simbrella.dev.user_mgt_service.exception.CustomValidationException;
 import com.simbrella.dev.user_mgt_service.exception.UserAlreadyExistException;
 import com.simbrella.dev.user_mgt_service.exception.UserNotFoundException;
 import com.simbrella.dev.user_mgt_service.repository.UserRepository;
+import com.simbrella.dev.user_mgt_service.service.EmailService;
 import com.simbrella.dev.user_mgt_service.service.UserService;
 import com.simbrella.dev.user_mgt_service.util.AppUtil;
+import com.simbrella.dev.user_mgt_service.util.LocalStorage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +35,10 @@ public class  UserServiceImpl implements UserService {
     private final AppUtil appUtil;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final LocalStorage memcachedStorage;
+    private final EmailService emailService;
+
+    @Transactional
     @Override
     public UserResponseDto createUser(UserRequestDto userDto) {
 
@@ -46,13 +54,31 @@ public class  UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("Phone number already exists");
         }
 
+
         User newUser = appUtil.getMapper().convertValue(userDto, User.class);
         newUser.setStatus(UserStatus.INACTIVE);
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setRole(Roles.ROLE_USER.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
 
         newUser = userRepository.save(newUser);
+
+        sendOTP(newUser.getEmail(), "Activate Your Account");
         return appUtil.mapToDto(newUser);
+    }
+
+    private void sendOTP(String email, String mailSubject) {
+        if (!userRepository.existsByEmail(email)){
+            throw new CustomValidationException("User with email: {" + email + "} does not exist");
+        }
+        String otp = appUtil.generateSerialNumber("OTP");
+        memcachedStorage.save(email, otp, 900);
+        EmailDto emailDto = EmailDto.builder()
+                .to(email)
+                .subject(mailSubject.toUpperCase())
+                .body(String.format("Use this OTP to %s. %s expires in 15 minutes", mailSubject.toLowerCase(), otp))
+                .build();
+        emailService.sendMail(emailDto);
+
     }
 
     @Override

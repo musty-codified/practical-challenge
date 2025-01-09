@@ -6,6 +6,8 @@ import com.simbrella.dev.user_mgt_service.entity.User;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
+
 
 @Component
 public class AppUtil {
@@ -39,6 +41,12 @@ public class AppUtil {
             throw new IllegalArgumentException("Invalid email format. Email must contain a username before the '@' symbol.");
         }
 
+    }
+
+    public  String generateSerialNumber(String prefix) {
+        Random rand = new Random();
+        long x = (long)(rand.nextDouble()*100000000000000L);
+        return  prefix + String.format("%014d", x);
     }
 
     public ObjectMapper getMapper(){
