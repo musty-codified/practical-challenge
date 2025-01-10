@@ -5,8 +5,9 @@ import com.simbrella.dev.loan_mgt_service.dto.request.TransactionDto;
 import java.util.List;
 
 public interface TransactionService {
-    String recordTransactions(TransactionDto transactionDto);
+    TransactionDto recordTransactions(TransactionDto transactionDto);
 
-    List<TransactionDto> getTransactionVyLoanId(Long loanId);
+    List<TransactionDto> getTransactionByLoanId(Long loanId);
 
+    TransactionDto generateTransactionStatementByUserId(Long userId);
 }

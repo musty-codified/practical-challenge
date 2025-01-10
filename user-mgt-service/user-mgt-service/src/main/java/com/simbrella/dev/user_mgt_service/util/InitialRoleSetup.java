@@ -22,6 +22,7 @@ import static com.simbrella.dev.user_mgt_service.enums.Roles.ROLE_ADMIN;
 public class InitialRoleSetup {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AppUtil appUtil;
     @EventListener
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event){
@@ -33,7 +34,7 @@ public class InitialRoleSetup {
             admin.setStatus(UserStatus.ACTIVE);
             admin.setUpdatedAt(LocalDateTime.now());
             admin.setCreatedAt(LocalDateTime.now());
-            admin.setPhoneNumber("8166099828");
+            admin.setPhoneNumber(appUtil.getFormattedNumber("8166099828"));
             admin.setPassword(passwordEncoder.encode("0bv20S!ecQgd"));
             admin.setEmail("musty@gmail.com");
             admin.setRole(ROLE_ADMIN.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));

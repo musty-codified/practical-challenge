@@ -31,6 +31,7 @@ public class LoanController {
 
     private final LoanService loanService;
     private final LocalValidatorFactoryBean validator;
+
     @Operation(summary = "Request to apply for loan")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Request successfully processed")
     @PostMapping()
@@ -48,17 +49,18 @@ public class LoanController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<List<LoanDto>>> getLoanDetailsByUser(@PathVariable(value = "id") @Positive(message = "Loan ID must be a positive") Long id) {
-        if (id == null){
+        if (id == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ApiResponse<>(false, "ID is required", null));
         }
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request successfully processed", loanService.fetchLoanDetailsByUser(id)));
     }
+
     @Operation(summary = "This endpoint updates loan status by userId")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Request successfully processed")
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<LoanDto>> updateLoanStatus(@PathVariable("id") Long loanId,
-                                                                 @Valid @RequestBody UpdateLoanRequest updateRequest)  {
+                                                                 @Valid @RequestBody UpdateLoanRequest updateRequest) {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request successfully processed", loanService.updateLoan(loanId, updateRequest)));
 
     }

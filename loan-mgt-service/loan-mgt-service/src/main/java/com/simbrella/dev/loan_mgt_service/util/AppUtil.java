@@ -26,7 +26,7 @@ public class AppUtil {
     public TransactionDto mapToTransactionDto(Transaction transaction) {
         return TransactionDto.builder()
                 .amount(transaction.getAmount())
-                .transactionType(transaction.getTransactionType())
+                .transactionType(String.valueOf(transaction.getTransactionType()))
                 .loanId(transaction.getLoanId())
                 .build();
     }
