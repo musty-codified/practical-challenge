@@ -47,16 +47,13 @@ public class  UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new UserAlreadyExistException("User with email {" + userDto.getEmail() + "} already exists");
         }
-
-        boolean isPhoneExist = isPhoneNumberExist(appUtil.getFormattedNumber(userDto.getPhoneNumber()));
-        log.info("IsPhone exist:{}", isPhoneExist);
         if (isPhoneNumberExist(appUtil.getFormattedNumber(userDto.getPhoneNumber()))) {
             throw new UserAlreadyExistException("Phone number already exists");
         }
 
-
         User newUser = appUtil.getMapper().convertValue(userDto, User.class);
         newUser.setStatus(UserStatus.INACTIVE);
+        newUser.setPhoneNumber(appUtil.getFormattedNumber(userDto.getPhoneNumber()));
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setRole(Roles.ROLE_USER.getPermissions().stream().map(Objects::toString).collect(Collectors.joining(",")));
 
@@ -75,7 +72,7 @@ public class  UserServiceImpl implements UserService {
         EmailDto emailDto = EmailDto.builder()
                 .to(email)
                 .subject(mailSubject.toUpperCase())
-                .body(String.format("Use this OTP to %s. %s expires in 15 minutes", mailSubject.toLowerCase(), otp))
+                .body(String.format("Use this OTP to %s. %s expires in 15 minutes", mailSubject.toUpperCase(), otp))
                 .build();
         emailService.sendMail(emailDto);
 
