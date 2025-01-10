@@ -45,19 +45,23 @@ public class LoanController {
         return ResponseEntity.created(location).body(new ApiResponse<>(true, "Request successfully processed", response));
     }
 
+    @Operation(summary = "This endpoint allows retrieval of loans by userId")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Request successfully processed")
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<List<LoanDto>>> getLoanDetailsByUser(@PathVariable(value = "id") @Positive(message = "Loan ID must be a positive") Long id) {
         if (id == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ApiResponse<>(false, "ID is required", null));
         }
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.fetchLoanDetailsByUser(id)));
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request successfully processed", loanService.fetchLoanDetailsByUser(id)));
     }
-
+    @Operation(summary = "This endpoint updates loan status by userId")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "20o", description = "Request successfully processed")
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<LoanDto>> updateLoanStatus(@PathVariable("id") Long loanId,
-                                                                 @Validated() @RequestBody UpdateLoanRequest updateRequest)  {
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.updateLoan(loanId, updateRequest)));
+                                                                 @Valid @RequestBody UpdateLoanRequest updateRequest)  {
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request successfully processed", loanService.updateLoan(loanId, updateRequest)));
 
     }
 
