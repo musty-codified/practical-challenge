@@ -57,7 +57,7 @@ public class LoanController {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request successfully processed", loanService.fetchLoanDetailsByUser(id)));
     }
     @Operation(summary = "This endpoint updates loan status by userId")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "20o", description = "Request successfully processed")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Request successfully processed")
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<LoanDto>> updateLoanStatus(@PathVariable("id") Long loanId,
                                                                  @Valid @RequestBody UpdateLoanRequest updateRequest)  {
