@@ -21,4 +21,5 @@ public class UserResponseDTO {
     private LocalDateTime updatedAt;
     private String status;
     private String email;
+
 }

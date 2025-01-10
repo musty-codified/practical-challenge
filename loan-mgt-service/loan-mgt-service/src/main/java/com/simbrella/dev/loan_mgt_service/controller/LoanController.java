@@ -17,7 +17,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -32,11 +34,15 @@ public class LoanController {
     private final LoanService loanService;
     private final LocalValidatorFactoryBean validator;
     @Operation(summary = "Request to apply for loan")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Request successfully processed")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Request successfully processed")
     @PostMapping()
     public ResponseEntity<ApiResponse<LoanDto>> applyForLoan(@Valid @RequestBody LoanRequestDto loanDto) {
         LoanDto response = loanService.applyLoan(loanDto);
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", response));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(new ApiResponse<>(true, "Request successfully processed", response));
     }
 
     @GetMapping("/{id}")

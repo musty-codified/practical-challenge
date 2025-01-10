@@ -14,7 +14,8 @@ public class EmailConfig {
     public JavaMailSender javaMailSender(){
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setPort(587);
+        javaMailSender.setPort(465);
+//        javaMailSender.setPort(587);
         javaMailSender.setUsername("ewalletappllc@gmail.com");
         javaMailSender.setPassword("fdagwkvgqlifyyid");
 

@@ -25,14 +25,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtil;
     private final CustomUserDetailsService userDetailsService;
-    private final LocalStorage localStorage;
 
     @Override
     protected void doFilterInternal(@org.jetbrains.annotations.NotNull HttpServletRequest request, @org.jetbrains.annotations.NotNull HttpServletResponse response, @org.jetbrains.annotations.NotNull FilterChain filterChain) throws ServletException, IOException {
@@ -49,23 +47,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-
             String token = authorization.substring("Bearer ".length());
-
             String usernameFromToken = jwtUtil.getUsernameFromToken(token);
             UserDetails detailsFromToken = userDetailsService.loadUserByUsername(usernameFromToken);
                 for (GrantedAuthority authority : detailsFromToken.getAuthorities()){
                     log.info("authority claims:{}", authority);
 
                 }
-            String storedToken = localStorage.getValueByKey(usernameFromToken);
-            if (storedToken == null) {
-                sendError(response, "Unable to access authentication infrastructure");
-            }
-            assert storedToken != null;
-            if (!storedToken.equals(token)) {
-                sendError(response, "Inconsistent login history");
-            }
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usernameFromToken, null, detailsFromToken.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);

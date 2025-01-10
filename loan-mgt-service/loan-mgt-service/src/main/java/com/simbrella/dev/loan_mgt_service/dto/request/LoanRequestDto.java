@@ -1,9 +1,8 @@
 package com.simbrella.dev.loan_mgt_service.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,24 +13,18 @@ public class LoanRequestDto implements Serializable {
 
     private static final long serialVersionUID= 1L;
 
-
-    @Column(nullable = false)
-    @NotBlank(message = "amount is required")
-    @JsonProperty
-    @Schema(description = "amount", example = "5000.0")
+    @NotNull(message = "amount is required")
+    @Schema(description = "amount", example = "50000")
+    @DecimalMin("0.0")
     private BigDecimal amount;
 
-    @Column(nullable = false)
-    @NotBlank(message = "tenureInMonth is required")
-    @JsonProperty
-    @Schema(description = "tenureInMonth", example = "3")
+    @NotNull(message = "tenureInMonth is required")
+    @Schema(description = "tenureInMonth", example = "12")
     private Integer tenureInMonth;
 
-    @Column(nullable = false)
-    @NotBlank(message = "interestRate is required")
-    @JsonProperty
-    private BigDecimal interestRate;
 
+    @NotNull(message = "User ID is required")
+    @Schema(description = "User ID", example = "2")
     private Long userId;
 
 
