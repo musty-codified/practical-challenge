@@ -23,7 +23,7 @@ public class TransactionController {
             return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.recordTransactions(transactionDto)));
         }
 
-    @GetMapping("/transactions/loanId")
+    @GetMapping("/loanId")
     public ResponseEntity<ApiResponse<List<TransactionDto>>> getTransactionsByLoanId(@PathVariable("loanId") Long loanId) {
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Request Successfully processed", loanService.getTransactionVyLoanId(loanId)));
     }
