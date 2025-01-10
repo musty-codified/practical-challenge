@@ -81,12 +81,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Map<String, String>>> handleMethodArgumentNotValidExceptions(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getFieldErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining(", "));
-        return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse<>(false, message, null));
-    }
-
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ApiResponse<String>> handleIllegalStateException(IllegalStateException e) {
         e.printStackTrace();
