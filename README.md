@@ -1,4 +1,4 @@
-#  Backend Engineer Practical Challenge: Fintech-Backend-Microservice: Loan Mgt API
+# Fintech-Backend-Microservice: Loan Mgt API
 The backend api for a fintech application
 
 `Built with Spring Boot, secured with Spring Security (JWT), documented with Swagger (API)`
