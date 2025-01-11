@@ -10,6 +10,7 @@ import com.simbrella.dev.loan_mgt_service.service.TransactionService;
 import com.simbrella.dev.loan_mgt_service.util.AppUtil;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
@@ -42,7 +44,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         loanRepository.save(loan);
-
         Transaction transaction = Transaction.builder()
                 .transactionType(TransactionType.valueOf(transactionDto.getTransactionType()))
                 .amount(transactionDto.getAmount())
@@ -50,8 +51,9 @@ public class TransactionServiceImpl implements TransactionService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-
-        return appUtil.mapToTransactionDto(transactionRepository.save(transaction));
+        transaction = transactionRepository.save(transaction);
+        log.info("Transaction :{} has been recorded for loan ID :{}", transaction.getTransactionType().name(), transaction.getLoanId());
+        return appUtil.mapToTransactionDto(transaction);
     }
 
     private void validateRepayment(Loan loan, @NotNull(message = "amount is required") BigDecimal amount) {

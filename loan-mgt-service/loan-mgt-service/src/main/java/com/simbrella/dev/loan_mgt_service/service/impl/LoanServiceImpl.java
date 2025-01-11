@@ -92,15 +92,12 @@ public class LoanServiceImpl implements LoanService {
         if(loanDto.getUserId() == null) {
             throw new IllegalArgumentException("User Id cannot be null");
         }
-
         try {
             Map<String, Object> responseMap = userClient.fetchUserDetails(loanDto.getUserId());
             UserResponseDTO userResponse = parseResponse(responseMap);
-
             List<Loan> pendingLoans = loanRepository.findByUserIdAndStatus(loanDto.getUserId(), Status.PENDING);
             if (!pendingLoans.isEmpty()) {
                 throw new IllegalStateException("User already has a pending loan application.");
-
             }
             Loan loan = Loan.builder()
                     .amount(loanDto.getAmount())
@@ -113,6 +110,8 @@ public class LoanServiceImpl implements LoanService {
 
             try {
                 Loan savedLoan = loanRepository.save(loan);
+                log.info("Loan application submitted for user ID: {}, amount:{}, tenure:{} months",
+                        loan.getUserId(), loan.getAmount(), loan.getTenureInMonth());
                 return LoanDto.builder()
                         .id(savedLoan.getId())
                         .amount(savedLoan.getAmount())
@@ -167,6 +166,8 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = loanRepository.findById(loanId).orElseThrow(()-> new LoanNotFoundException("Loan not found", HttpStatus.NOT_FOUND.name()));
         loan.setStatus(Status.valueOf(updateRequest.getStatus()));
         loanRepository.save(loan);
+        log.info("Loan status with loan ID: {} has been updated", loanId);
+
         return appUtil.mapToDto(loan);
     }
 
