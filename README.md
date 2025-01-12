@@ -51,8 +51,7 @@ The backend api for a fintech application
 - Trade-offs: Transactions are tightly coupled with loan logic.
 
 ## API Documentation ##
-The services expose REST APIs for managing loans and transactions as per the task description document (TSD)
-API documentation is available via swagger 
+The services expose REST APIs for managing loans and transactions as per the task description document (TSD).
 
 
 
