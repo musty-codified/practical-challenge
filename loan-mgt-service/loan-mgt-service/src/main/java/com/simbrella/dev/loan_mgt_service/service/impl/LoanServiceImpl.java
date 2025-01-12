@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simbrella.dev.loan_mgt_service.dto.UserClient;
 import com.simbrella.dev.loan_mgt_service.dto.request.LoanRequestDto;
 import com.simbrella.dev.loan_mgt_service.dto.request.UpdateLoanRequest;
+import com.simbrella.dev.loan_mgt_service.dto.response.ApiResponse;
 import com.simbrella.dev.loan_mgt_service.dto.response.LoanDto;
 import com.simbrella.dev.loan_mgt_service.dto.response.UserResponseDTO;
 import com.simbrella.dev.loan_mgt_service.entity.Loan;
@@ -16,6 +17,7 @@ import com.simbrella.dev.loan_mgt_service.exception.UnAuthorizedException;
 import com.simbrella.dev.loan_mgt_service.repository.LoanRepository;
 import com.simbrella.dev.loan_mgt_service.service.LoanService;
 import com.simbrella.dev.loan_mgt_service.util.AppUtil;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +89,7 @@ public class LoanServiceImpl implements LoanService {
         return null;
     }
 
+    @RateLimiter(name = "${spring.application.name}", fallbackMethod = "applyLoanFallback")
     @Override
     public LoanDto applyLoan(LoanRequestDto loanDto) {
         if(loanDto.getUserId() == null) {
@@ -167,7 +170,6 @@ public class LoanServiceImpl implements LoanService {
         loan.setStatus(Status.valueOf(updateRequest.getStatus()));
         loanRepository.save(loan);
         log.info("Loan status with loan ID: {} has been updated", loanId);
-
         return appUtil.mapToDto(loan);
     }
 
@@ -191,4 +193,14 @@ public class LoanServiceImpl implements LoanService {
                .updatedAt(LocalDateTime.parse((String) data.get("updatedAt")))
                .build();
     }
+
+    public ApiResponse<LoanDto> applyLoanFallback(LoanRequestDto loanDto) {
+        return new ApiResponse<>(
+                false,
+                "Rate limit exceeded. Please try again later",
+                null
+
+        );
+    }
+
 }

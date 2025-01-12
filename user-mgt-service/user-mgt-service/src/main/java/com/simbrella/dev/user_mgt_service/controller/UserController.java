@@ -8,6 +8,7 @@ import com.simbrella.dev.user_mgt_service.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -79,8 +80,9 @@ public class UserController {
 
     }
     @Operation(summary = "Deletes a user", description = "Deletes a user by its ID provided in the parameters")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Request successfully processed",
-            content = @Content(schema = @Schema(hidden = true)))
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Request successfully processed")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Successfully deleted the product", content = @Content(schema = @Schema(hidden = true)))})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") @Positive(message = "User ID must be a positive number") Long id) {
         userService.deleteUser(id);

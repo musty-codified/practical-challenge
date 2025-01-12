@@ -5,11 +5,12 @@ The backend api for a fintech application
 
 ## 1. Project Setup ##
 - **Java 17**
-- **Spring Boot**
+- **Spring Boot 3.4.1**
 - **Maven**
 - **MySQL**
 - **Swagger** 
 - **JWT**
+- **Memcached**
 
 ---
 
@@ -18,7 +19,7 @@ The backend api for a fintech application
 - loan-mgt-service
 
 ## 3. Running the server locally ##
--   Ensure Maven is installed and running on your machine before you run this service.
+-   Ensure Maven and Memcached is installed and running on your machine before you run this service.
 - **Clone the repository:** git clone [repo-link](https://github.com/musty-codified/practical-challenge.git)
 
        cd user-mgt-service
@@ -45,13 +46,14 @@ The backend api for a fintech application
 ### 4.3 Spring Security with JWT Authentication
 - Why: Secure, stateless authentication for inter-service communication.
 - Trade-offs: Slightly more overhead in token generation and validation.
-### 4.4 Consolidated Transaction Processing in Loan Service
+### 4.4 Transaction Processing in Loan Service
 - Why: Loan mgt service inherently includes transaction processing, and separating them adds unnecessary complexity.
 - Trade-offs: Transactions are tightly coupled with loan logic.
 
 ## API Documentation ##
-The services expose REST APIs for managing loans and transactions as per the task description document
-API documentation is available via Swagger:
+The services expose REST APIs for managing loans and transactions as per the task description document (TSD)
+API documentation is available via swagger 
+
 
 
 
