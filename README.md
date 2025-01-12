@@ -24,7 +24,7 @@ The backend api for a fintech application
 
        cd user-mgt-service
        cd loan-mgt-service
-- **Configure Environment:** Update `application.yml` with your MySQL configurations:
+- **Configure Environment:** Update `application.yml` with your MySQL and memcached configurations.
 - **Build the project using maven:** mvn clean install
 - **Run the application from the command line:** mvn spring-boot:run
 - **Access APIs: Swagger documentation is available at:**
